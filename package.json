@@ -12,6 +12,7 @@
     "push": "drizzle-kit push"
   },
   "dependencies": {
+    "@clerk/nextjs": "^5.7.5",
     "@vercel/postgres": "^0.10.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
