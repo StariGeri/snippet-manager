@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.0.0",
+    "@clerk/themes": "^2.1.38",
     "@vercel/postgres": "^0.10.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

@@ -1,11 +1,9 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, UserButton } from "@clerk/nextjs";
+import { neobrutalism } from "@clerk/themes";
 
 export default function Home() {
   return (
     <div>
-      <SignedOut>
-        <SignInButton />
-      </SignedOut>
       <SignedIn>
         <UserButton />
       </SignedIn>
