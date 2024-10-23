@@ -19,6 +19,7 @@ A felhasználó snippeteket gyűjthet, azokat csoportosíthatja és azokban kere
 Az alkalmazásba csak OAuth providereken keresztül lehet regisztrálni, a következőek támogatottak:
 - Google
 - Github
+- Gitlab
 
 A felhasználókról nem tárolunk sokat, csupán az authentikáció szempontjából lényeges adatokat:
 - ID
