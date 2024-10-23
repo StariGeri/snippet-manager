@@ -1,5 +1,4 @@
 import { SignIn } from "@clerk/nextjs";
-import { neobrutalism } from "@clerk/themes";
 
 export default function SignInPage() {
 
