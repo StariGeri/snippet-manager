@@ -14,4 +14,4 @@ Generate / migrate is recommended for projects that needs migration files.
 Push is recommended for quickly iterating through changes or for projects that doesn't require migration files.
 
 To apply changes to the DB through a script, simply change the content of the scripts/seed.ts file and run the following command:
-```npx tsx src/seed.ts```
+```npx tsx scripts/seed.ts```

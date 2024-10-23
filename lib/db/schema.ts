@@ -1,8 +1,39 @@
-import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { pgTable, varchar, uuid, timestamp, text, integer, primaryKey } from "drizzle-orm/pg-core";
 
-export const usersTable = pgTable("users", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  name: varchar({ length: 255 }).notNull(),
-  age: integer().notNull(),
-  email: varchar({ length: 255 }).notNull().unique(),
+
+// Folders table
+export const folders = pgTable("folders", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  userId: varchar("user_id", { length: 255 }).notNull(), // Clerk user ID
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+
+// Snippets table
+export const snippets = pgTable("snippets", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: varchar("description"),
+  language: varchar("language", { length: 50 }),
+  code: text("code").notNull(),
+  folderId: uuid("folder_id").references(() => folders.id),
+  userId: varchar("user_id", { length: 255 }).notNull(), // Clerk user ID
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// New Tags table
+export const tags = pgTable("tags", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: varchar("name", { length: 50 }).notNull(),
+  userId: varchar("user_id", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// New SnippetTags junction table
+export const snippetTags = pgTable("snippet_tags", {
+  snippetId: uuid("snippet_id").notNull().references(() => snippets.id),
+  tagId: uuid("tag_id").notNull().references(() => tags.id)
 });
