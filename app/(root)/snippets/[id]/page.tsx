@@ -1,4 +1,4 @@
-export default async function SnippetPage({ params }) {
+export default async function SnippetPage({ params }: { params: { id: string } }) {
     const { id } = await params;
 
     return (

@@ -4,7 +4,7 @@ import { pgTable, varchar, uuid, timestamp, text } from "drizzle-orm/pg-core";
 // Folders table
 export const folders = pgTable("folders", {
   id: uuid("id").defaultRandom().primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull().unique(),
   userId: varchar("user_id", { length: 255 }).notNull(), // Clerk user ID
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
