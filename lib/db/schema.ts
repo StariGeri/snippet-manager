@@ -1,4 +1,4 @@
-import { pgTable, varchar, uuid, timestamp, text, integer, primaryKey } from "drizzle-orm/pg-core";
+import { pgTable, varchar, uuid, timestamp, text } from "drizzle-orm/pg-core";
 
 
 // Folders table
@@ -37,3 +37,10 @@ export const snippetTags = pgTable("snippet_tags", {
   snippetId: uuid("snippet_id").notNull().references(() => snippets.id),
   tagId: uuid("tag_id").notNull().references(() => tags.id)
 });
+
+// Types
+
+export type InsertFolder = typeof folders.$inferInsert;
+export type SelectFolder = typeof folders.$inferSelect;
+export type InsertSnippet = typeof snippets.$inferInsert;
+export type SelectSnippet = typeof snippets.$inferSelect;

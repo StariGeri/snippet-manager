@@ -6,6 +6,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarGroupLabel
 } from "@/components/ui/sidebar"
 
 export function NavMain({
@@ -20,6 +21,7 @@ export function NavMain({
 }) {
   return (
     <SidebarMenu>
+      <SidebarGroupLabel className="text-primary">Menu</SidebarGroupLabel>
       {items.map((item) => (
         <SidebarMenuItem key={item.title}>
           <SidebarMenuButton asChild isActive={item.isActive}>

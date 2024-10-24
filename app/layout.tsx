@@ -20,7 +20,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={cn("h-full w-full bg-white antialiased", inter.className)}>
-          <main>{children}</main>
+          {children}
         </body>
       </html>
     </ClerkProvider>
