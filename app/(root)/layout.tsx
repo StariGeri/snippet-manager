@@ -5,7 +5,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <main className="grid min-h-screen w-full md:grid-cols-[255px_1fr]">
             <AppSidebar />
-            {children}
+            <div className="p-2">{children}</div>
         </main>
     );
 };

@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '@/lib/db';
-import { snippets, folders, tags, snippetTags } from '@/lib/db/schema';
+import { snippets } from '@/lib/db/schema';
 
 export async function getAllSnippets() {
   console.log('Fetching snippets');

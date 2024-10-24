@@ -14,7 +14,7 @@
 
 ## Specifikáció
 
-A felhasználó snippeteket gyűjthet, azokat csoportosíthatja és azokban kereshet. Az app használatához regisztrálni kell és az alkalmazásba belépni.
+A felhasználó kód snippeteket gyűjthet, azokat csoportosíthatja és azokban kereshet. Az app használatához regisztrálni kell és az alkalmazásba belépni.
 
 A snippetekről a következőket tároljuk:
 - ID
@@ -27,7 +27,9 @@ A snippetekről a következőket tároljuk:
 
 A snippeteket a tagek és technológiák alapján csoportosíthatjuk. A cím alapján szabadszavasan kereshetünk. 
 
-A főoldalon a snippetek megtekinthetőek és betöltenek Infinite Scrollal, itt lehet szűrni / keresni azokat.
+A főoldalon egy dashboardon tekinthetik meg a felhasználók a snippetjeikre vontatkozó statisztikákat (kategóriák szerinti lebontás stb..)
+
+A /snippets oldalon a snippetek megtekinthetőek és betöltenek Infinite Scrollal, itt lehet szűrni / keresni azokat.
 
 A Sidebar-on meg lehet tekinteni a mappa struktúrát és kattintásra a snippetek innen is megnyithatóak.
 
