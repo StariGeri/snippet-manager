@@ -1,6 +1,6 @@
 'use client';
 
-import { SnippetCardItem } from "@/types/snippet";
+import { Snippet } from "@/types/snippet";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Prism from "prismjs";
@@ -42,9 +42,6 @@ import "prismjs/components/prism-r";
 import "prismjs/components/prism-swift";
 import "prismjs/components/prism-scala";
 
-interface SnippetCardProps {
-    snippet: SnippetCardItem;
-}
 
 const languageIcons = [
     { name: "javascript", icon: JavascriptIcon },
@@ -83,7 +80,7 @@ const getLanguageIcon = (language: string) => {
     return iconData ? iconData.icon : FileCode;
 };
 
-const SnippetCard = ({ snippet }: SnippetCardProps) => {
+const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
 
     useEffect(() => {
         Prism.highlightAll();

@@ -1,12 +1,15 @@
 import { AppSidebar } from "@/components/layout/app-sidebar";
+import Providers from "@/lib/Providers";
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
     return (
-        <main className="grid min-h-screen w-full md:grid-cols-[255px_1fr]">
-            <AppSidebar />
-            <div className="p-2">{children}</div>
-        </main>
+        <Providers>
+            <main className="grid min-h-screen w-full md:grid-cols-[255px_1fr]">
+                <AppSidebar />
+                <div className="p-2">{children}</div>
+            </main>
+        </Providers>
     );
 };
 

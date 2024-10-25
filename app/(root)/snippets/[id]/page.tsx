@@ -13,7 +13,6 @@ export default async function SnippetPage({ params }: { params: { id: string } }
             <AlertDescription>The snippet you are looking for does not exist.</AlertDescription>
         </Alert>
     } else {
-        // Use the snippet data
         return <SnippetDetail snippet={snippet} />;
     }
 }
