@@ -16,7 +16,7 @@ export const snippets = pgTable("snippets", {
   id: uuid("id").defaultRandom().primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),
   description: varchar("description"),
-  language: varchar("language", { length: 50 }),
+  language: varchar("language", { length: 50 }).notNull(),
   code: text("code").notNull(),
   folderId: uuid("folder_id").references(() => folders.id),
   userId: varchar("user_id", { length: 255 }).notNull(), // Clerk user ID

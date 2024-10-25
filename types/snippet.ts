@@ -1,3 +1,5 @@
+import { SelectSnippet } from '@/lib/db/schema';
+
 export type SnippetCardItem = {
   id: string; 
   title: string; 
@@ -7,7 +9,11 @@ export type SnippetCardItem = {
   tags?: Tag[]; 
 };
 
-export type Tag = {
-  id: string; 
-  name: string; 
-};
+export interface Tag {
+  id: string;
+  name: string;
+}
+
+export interface Snippet extends SelectSnippet {
+  tags: Tag[];
+}
