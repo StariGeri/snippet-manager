@@ -1,5 +1,6 @@
 import { Code, Home } from 'lucide-react';
 import { SnippetCardItem } from './types/snippet';
+import { ComboboxOption } from './components/shared/Combobox';
 
 export const navItems = [
   {
@@ -15,21 +16,49 @@ export const navItems = [
   },
 ];
 
-export const initialFolders = [
-  {
-    id: '1',
-    name: 'JavaScript',
-    snippets: [
-      { id: '1', name: 'Array Methods' },
-      { id: '2', name: 'Promise Example' },
-    ],
-  },
-  {
-    id: '2',
-    name: 'React',
-    snippets: [
-      { id: '3', name: 'useEffect Hook' },
-      { id: '4', name: 'Custom Hook' },
-    ],
-  },
+export const technologies: ComboboxOption[] = [
+  { label: 'All', value: '' },
+  { label: 'Text', value: 'text' },
+  { label: 'React', value: 'react' },
+  { label: 'JavaScript', value: 'javascript' },
+  { label: 'Python', value: 'python' },
+  { label: 'TypeScript', value: 'typescript' },
+  { label: 'Java', value: 'java' },
+  { label: 'Bash', value: 'bash' },
+  { label: 'HTML', value: 'html' },
+  { label: 'CSS', value: 'css' },
+  { label: 'Less', value: 'less' },
+  { label: 'Sass', value: 'sass' },
+  { label: 'Go', value: 'go' },
+  { label: 'Rust', value: 'rust' },
+  { label: 'C#', value: 'c#' },
+  { label: 'C++', value: 'c++' },
+  { label: 'Vue', value: 'vue' },
+  { label: 'Svelte', value: 'svelte' },
+  { label: 'Godot', value: 'godot' },
+  { label: 'Lua', value: 'lua' },
+  { label: 'Kotlin', value: 'kotlin' },
+  { label: 'Alpinejs', value: 'alpinejs' },
+  { label: 'Angular', value: 'angular' },
+  { label: 'Dart', value: 'dart' },
+  { label: 'Express', value: 'express' },
+  { label: 'Flutter', value: 'flutter' },
+  { label: 'GraphQL', value: 'graphql' },
+  { label: 'JSON', value: 'json' },
+  { label: 'Next.js', value: 'nextjs' },
+  { label: 'Nest.js', value: 'nestjs' },
+  { label: 'NPM', value: 'npm' },
+  { label: 'Nuxt', value: 'nuxt' },
+  { label: 'PHP', value: 'php' },
+  { label: 'Prisma', value: 'prisma' },
+  { label: '.NET', value: '.net' },
+  { label: 'Yaml', value: 'yaml' },
+  { label: 'Elixir', value: 'elixir' },
+  { label: 'Swift', value: 'swift' },
+  { label: 'Perl', value: 'perl' },
+  { label: 'Haskell', value: 'haskell' },
+  { label: 'Scala', value: 'scala' },
+  { label: 'Ruby', value: 'ruby' },
+  { label: 'R', value: 'r' },
+  { label: 'SQL', value: 'sql' },
 ];
