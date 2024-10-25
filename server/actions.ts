@@ -1,10 +1,33 @@
 'use server';
 
 import { db } from '@/lib/db';
-import { snippets, snippetTags, tags } from '@/lib/db/schema';
+import { snippets, snippetTags, tags, folders, SelectFolder, SelectSnippet } from '@/lib/db/schema';
 import { Snippet } from '@/types/snippet';
 import { auth } from '@clerk/nextjs/server';
 import { eq, and } from 'drizzle-orm';
+
+interface FoldersAndSnippets {
+  folders: SelectFolder[];
+  snippets: SelectSnippet[];
+}
+
+export async function getFoldersAndSnippets(): Promise<FoldersAndSnippets> {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return { folders: [], snippets: [] };
+  }
+
+  try {
+    const userFolders = await db.select().from(folders).where(eq(folders.userId, userId));
+    const userSnippets = await db.select().from(snippets).where(eq(snippets.userId, userId));
+
+    return { folders: userFolders, snippets: userSnippets };
+  } catch (error) {
+    console.error('Error fetching folders and snippets:', error);
+    return { folders: [], snippets: [] };
+  }
+}
 
 export async function getSnippets(page: number = 1, limit: number = 6): Promise<Snippet[]> {
   const { userId } = await auth();
