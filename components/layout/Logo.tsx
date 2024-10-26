@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Terminal } from "lucide-react"
 
-export function Logo() {
+const Logo = () => {
 
   return (
     <div className="flex items-center w-fit px-1.5 gap-x-2 pb-2">
@@ -12,3 +12,5 @@ export function Logo() {
     </div>
   )
 }
+
+export default Logo;

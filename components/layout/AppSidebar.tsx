@@ -3,18 +3,17 @@
 import * as React from "react"
 
 import { NavMain } from "@/components/layout/NavMain"
-import { Logo } from "@/components/layout/Logo"
+import Logo from "@/components/layout/Logo"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarProvider,
-  SidebarRail,
 } from "@/components/ui/sidebar"
 import { navItems } from "@/constants"
-import UserProfile from "./UserProfile"
-import SnippetExplorer from "./SnippetExplorer"
+import UserProfile from "@/components/layout/UserProfile"
+import SnippetExplorer from "@/components/layout/SnippetExplorer"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
