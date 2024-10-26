@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getDashboardData } from '@/server/dashboard-actions'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -47,7 +47,7 @@ export default function Dashboard() {
                     </CardHeader>
                     <CardContent className="h-[300px]">
                         {data.snippetsByLanguage.length === 0 ?
-                            <p className=''>No snippets found. Use the "+" icon on the sidebar, to create snippets.</p>
+                            <p className=''>No snippets found. Use the&quot;+&quot; icon on the sidebar, to create snippets.</p>
                             : (
                                 <ChartContainer
                                     config={{

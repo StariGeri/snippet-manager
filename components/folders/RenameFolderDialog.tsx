@@ -17,7 +17,7 @@ import { toast } from "@/hooks/use-toast"
 const RenameFolderDialog = ({ folder, onFolderRenamed }: { folder: SelectFolder, onFolderRenamed: () => void }) => {
     const [open, setOpen] = React.useState(false)
     const [isSubmitting, setIsSubmitting] = React.useState(false)
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<z.infer<typeof folderSchema>>({
+    const { register, handleSubmit, formState: { errors } } = useForm<z.infer<typeof folderSchema>>({
         resolver: zodResolver(folderSchema),
         defaultValues: { name: folder.name }
     })
@@ -46,6 +46,7 @@ const RenameFolderDialog = ({ folder, onFolderRenamed }: { folder: SelectFolder,
                 description: "An unexpected error occurred.",
                 variant: "destructive",
             })
+            console.error(error);
         } finally {
             setIsSubmitting(false)
         }
@@ -63,7 +64,7 @@ const RenameFolderDialog = ({ folder, onFolderRenamed }: { folder: SelectFolder,
                     <DialogHeader>
                         <DialogTitle>Rename Folder</DialogTitle>
                         <DialogDescription>
-                            Enter a new name for the folder. Click save when you're done.
+                            Enter a new name for the folder. Click save when you&apos;re done.
                         </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">

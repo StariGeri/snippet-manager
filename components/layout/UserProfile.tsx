@@ -3,7 +3,7 @@
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "../ui/dropdown-menu";
 import { ChevronsUpDown, User, LogOut } from "lucide-react";
-import { SidebarFooter, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
 import { useClerk, useUser } from "@clerk/nextjs";
 
 const UserProfile = () => {

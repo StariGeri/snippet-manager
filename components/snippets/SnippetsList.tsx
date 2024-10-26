@@ -4,7 +4,9 @@ import SnippetCard from "./SnippetCard";
 const SnippetList = ({ snippets }: { snippets: Snippet[] }) => {
 
     if (snippets.length === 0) {
-        return <div className="flex justify-center items-center mx-auto pt-6 max-w-[400px] text-center">No snippets found. Use the "+" button on the sidebar to create snippets.</div>
+        return <div className="flex justify-center items-center mx-auto pt-6 max-w-[400px] text-center">
+            No snippets found. Use the &quot;+&quot; button on the sidebar to create snippets.
+        </div>
     }
 
     return (

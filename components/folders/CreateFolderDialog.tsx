@@ -47,6 +47,7 @@ const CreateFolderDialog = ({ onFolderCreated }: { onFolderCreated: () => void }
                 description: "An unexpected error occurred.",
                 variant: "destructive",
             })
+            console.error(error);
         } finally {
             setIsSubmitting(false)
         }
@@ -68,7 +69,7 @@ const CreateFolderDialog = ({ onFolderCreated }: { onFolderCreated: () => void }
                             Create Folder
                         </DialogTitle>
                         <DialogDescription>
-                            Enter a name for your new folder. Click save when you're done.
+                            Enter a name for your new folder. Click save when you&apos;re done.
                         </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
