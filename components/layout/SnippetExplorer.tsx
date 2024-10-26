@@ -14,7 +14,8 @@ import RenameFolderDialog from "../folders/RenameFolderDialog"
 import SnippetItem from "../snippets/SnippetNavItem"
 import DeleteFolderDialog from "../folders/DeleteFolderDialog"
 import CreateFolderDialog from "../folders/CreateFolderDialog"
-import { useSnippetExplorer } from "@/hooks/useSnippetExplorer"
+import { useSnippetExplorer } from "@/hooks/useSnippetExplorer";
+import { useRouter } from 'next/navigation';
 
 interface FoldersAndSnippets {
     folders: SelectFolder[]
@@ -24,14 +25,19 @@ interface FoldersAndSnippets {
 const SnippetExplorer = () => {
 
     const { openFolderId, handleFolderClick, handleFolderCreated, handleFolderDeleted, handleFolderRenamed } = useSnippetExplorer();
-
+    
+    // Fetching the folders and snippets data
     const { data, isLoading } = useQuery<FoldersAndSnippets>({
         queryKey: ['foldersAndSnippets'],
         queryFn: getFoldersAndSnippets
     })
 
+    const router = useRouter()
+
+    // Show the skeleton loader while the data is being fetched
     if (isLoading) return <SkeletonSnippetExplorer />
 
+    // If there is no data, return null
     if (!data) return null
 
     const { folders, snippets } = data
@@ -52,7 +58,7 @@ const SnippetExplorer = () => {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
                         <CreateFolderDialog onFolderCreated={handleFolderCreated} />
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onSelect={() => router.push('/snippets/create')}>
                             <Code className="h-4 w-4 mr-1" />
                             Create Snippet
                         </DropdownMenuItem>

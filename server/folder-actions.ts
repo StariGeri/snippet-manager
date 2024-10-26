@@ -1,4 +1,4 @@
-"use server";
+'use server';
 
 import { db } from '@/lib/db';
 import { snippets, folders, SelectFolder, SelectSnippet } from '@/lib/db/schema';
@@ -34,6 +34,41 @@ export async function getFoldersAndSnippets(): Promise<FoldersAndSnippets> {
   } catch (error) {
     console.error('Error fetching folders and snippets:', error);
     return { folders: [], snippets: [] };
+  }
+}
+
+/**
+ * Retrieves the folders associated with the authenticated user.
+ * 
+ * @async
+ * @function getUserFolders
+ * @returns {Promise<{ success: boolean, folders?: Array<{ id: string, name: string }>, error?: string }>} 
+ * An object containing the success status, an array of user folders if successful, 
+ * or an error message if an error occurred.
+ * 
+ * @throws {Error} If the user is not authenticated.
+ */
+export async function getUserFolders() {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error('User not authenticated');
+  }
+
+  try {
+    const userFolders = await db
+      .select({
+        id: folders.id,
+        name: folders.name,
+      })
+      .from(folders)
+      .where(eq(folders.userId, userId))
+      .orderBy(folders.name);
+
+    return { success: true, folders: userFolders };
+  } catch (error) {
+    console.error('Error fetching user folders:', error);
+    return { success: false, error: (error as Error).message };
   }
 }
 

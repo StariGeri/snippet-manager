@@ -5,10 +5,11 @@ import { snippets, snippetTags, tags } from '@/lib/db/schema';
 import { Snippet } from '@/types/snippet';
 import { auth } from '@clerk/nextjs/server';
 import { eq, and, ilike, or } from 'drizzle-orm';
+import { revalidatePath } from 'next/cache';
 
 
 /**
- * Fetches snippets from the database based on the provided parameters.
+ * Fetches snippets from the database with support for infinite query and filtering
  *
  * @param {number} [page=1] - The page number for pagination.
  * @param {number} [limit=6] - The number of snippets to fetch per page.
@@ -118,3 +119,73 @@ export async function getSnippetById(id: string): Promise<Snippet | null> {
     return null;
   }
 }
+
+
+/**
+ * Creates a new snippet with the provided data, associates it with tags, and revalidates the snippets path.
+ * 
+ * @param data - The data for the new snippet.
+ * @param data.title - The title of the snippet.
+ * @param data.description - The description of the snippet.
+ * @param data.language - The programming language of the snippet.
+ * @param data.code - The code content of the snippet.
+ * @param data.folderId - The ID of the folder to which the snippet belongs, or null if it doesn't belong to any folder.
+ * @param data.tags - An array of tags to associate with the snippet.
+ * 
+ * @returns An object indicating the success of the operation and the ID of the created snippet if successful.
+ * 
+ * @throws Will throw an error if the user is not authenticated.
+ */
+export async function createSnippet(data: {
+  title: string
+  description?: string
+  language: string
+  code: string
+  folderId?: string | null
+  tags: string[]
+}) {
+
+  console.log('Creating snippet:', data)
+  const { userId } = await auth()
+
+  if (!userId) {
+    throw new Error('User not authenticated')
+  }
+
+  try {
+    const [newSnippet] = await db.insert(snippets).values({
+      title: data.title,
+      description: data.description || null,
+      language: data.language,
+      code: data.code,
+      folderId: data.folderId,
+      userId,
+    }).returning()
+
+    // Create tags and associate them with the snippet
+    for (const tagName of data.tags) {
+      const [existingTag] = await db
+        .select()
+        .from(tags)
+        .where(and(eq(tags.name, tagName) , eq(tags.userId, userId)))
+        .limit(1);
+
+      let tagId
+      if (existingTag) {
+        tagId = existingTag.id
+      } else {
+        const [newTag] = await db.insert(tags).values({ name: tagName, userId }).returning()
+        tagId = newTag.id
+      }
+
+      await db.insert(snippetTags).values({ snippetId: newSnippet.id, tagId })
+    }
+
+    revalidatePath('/snippets')
+    return { success: true, snippetId: newSnippet.id }
+  } catch (error) {
+    console.error('Error creating snippet:', error)
+    return { success: false, error: (error as Error).message }
+  }
+}
+
