@@ -54,7 +54,7 @@ const DeleteFolderDialog = ({ folder, onFolderDeleted }: { folder: SelectFolder,
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                     <AlertDialogDescription>
                         This action cannot be undone. This will permanently delete the
-                        folder "{folder.name}" and all its contents.
+                        folder "{folder.name}". All of its snippets will be moved to the "Uncategorized" folder.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

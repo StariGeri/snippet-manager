@@ -39,13 +39,13 @@ export async function getFoldersAndSnippets(): Promise<FoldersAndSnippets> {
 
 /**
  * Retrieves the folders associated with the authenticated user.
- * 
+ *
  * @async
  * @function getUserFolders
- * @returns {Promise<{ success: boolean, folders?: Array<{ id: string, name: string }>, error?: string }>} 
- * An object containing the success status, an array of user folders if successful, 
+ * @returns {Promise<{ success: boolean, folders?: Array<{ id: string, name: string }>, error?: string }>}
+ * An object containing the success status, an array of user folders if successful,
  * or an error message if an error occurred.
- * 
+ *
  * @throws {Error} If the user is not authenticated.
  */
 export async function getUserFolders() {
@@ -168,8 +168,17 @@ export async function deleteFolder(folderId: string) {
   }
 
   try {
-    // Delete the folder
-    await db.delete(folders).where(and(eq(folders.id, folderId), eq(folders.userId, userId)));
+    // Start a transaction
+    await db.transaction(async (tx) => {
+      // First, update all snippets in this folder to have no folder (set folderId to null)
+      await tx
+        .update(snippets)
+        .set({ folderId: null })
+        .where(and(eq(snippets.folderId, folderId), eq(snippets.userId, userId)));
+
+      // Then, delete the folder
+      await tx.delete(folders).where(and(eq(folders.id, folderId), eq(folders.userId, userId)));
+    });
 
     revalidatePath('/snippets');
     return { success: true };

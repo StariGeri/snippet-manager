@@ -2,7 +2,7 @@
 export default function Home() {
   return (
     <>
-      Ez lesz a Dashboard
+      This will be a dashboard with graphs and stuff about the user's snippets
     </>
   );
 }

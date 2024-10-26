@@ -72,7 +72,7 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
                     <div className="mb-2 flex flex-wrap gap-2">
                         <Badge variant="default">{snippet.language}</Badge>
                         {snippet.tags?.map((tag) => (
-                            <Badge key={tag.id} variant="secondary">
+                            <Badge key={tag.id + Math.random} variant="secondary">
                                 {tag.name}
                             </Badge>
                         ))}

@@ -3,16 +3,22 @@
 import { Snippet } from "@/types/snippet"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import Prism from "prismjs"
-import { useEffect, useState } from "react"
 import { getLanguageIcon } from "@/hooks/useLanguageIcon";
 import { CopyIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
-import { deleteSnippet } from "@/server/snippet-actions";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { useQueryClient } from "@tanstack/react-query";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { useSnippetDetail } from "@/hooks/useSnippetDetail";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 // Import Prism themes and languages
 import "prismjs/themes/prism-tomorrow.css";
@@ -48,43 +54,9 @@ import "prismjs/components/prism-scala";
 
 export default function SnippetDetail({ snippet }: { snippet: Snippet }) {
 
-  const router = useRouter();
-  const queryClient = useQueryClient();
+  const { handleCopy, handleEdit, handleDelete, isDeleteDialogOpen, setIsDeleteDialogOpen, copied } = useSnippetDetail(snippet);
 
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(snippet.code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 4000);
-  };
-
-  const handleEdit = () => {
-    router.push(`/snippets/edit/${snippet.id}`);
-  };
-
-  const handleDelete = async () => {
-    const result = await deleteSnippet(snippet.id);
-    if (result.success) {
-      toast({
-        title: "Snippet deleted",
-        description: "Your snippet has been deleted successfully.",
-      });
-      router.push("/snippets");
-      queryClient.invalidateQueries({ queryKey: ['foldersAndSnippets'] });
-    } else {
-      toast({
-        title: "Error",
-        description: result.error || "An error occurred while deleting the snippet.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  useEffect(() => {
-    Prism.highlightAll()
-  }, [snippet])
-
+  // get the icon of the used technology
   const LanguageIcon = getLanguageIcon(snippet.language);
 
   return (
@@ -98,7 +70,7 @@ export default function SnippetDetail({ snippet }: { snippet: Snippet }) {
             </CardTitle>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="default">
+                <Button variant="outline">
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -107,10 +79,27 @@ export default function SnippetDetail({ snippet }: { snippet: Snippet }) {
                   <Pencil className="mr-2 h-4 w-4" />
                   <span>Edit</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleDelete}>
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  <span>Delete</span>
-                </DropdownMenuItem>
+                <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                  <AlertDialogTrigger asChild>
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      <span>Delete</span>
+                    </DropdownMenuItem>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your
+                        snippet and remove its data from our servers.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

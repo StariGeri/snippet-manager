@@ -24,7 +24,7 @@ interface FoldersAndSnippets {
 
 const SnippetExplorer = () => {
     const { openFolderId, handleFolderClick, handleFolderCreated, handleFolderDeleted, handleFolderRenamed } = useSnippetExplorer();
-    
+
     const { data, isLoading } = useQuery<FoldersAndSnippets>({
         queryKey: ['foldersAndSnippets'],
         queryFn: getFoldersAndSnippets
@@ -42,12 +42,14 @@ const SnippetExplorer = () => {
 
     return (
         <SidebarGroup>
-            <SidebarGroupLabel className="text-primary flex justify-between items-center">
-                Snippets
+            <div className="flex items-center justify-between">
+                <SidebarGroupLabel className="text-primary flex justify-between items-center">
+                    Snippets
+                </SidebarGroupLabel>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">
-                            <Plus className="h-4 w-4" />
+                            <Plus className="h-4 w-4 text-black" />
                             <span className="sr-only">Add folder or snippet</span>
                         </Button>
                     </DropdownMenuTrigger>
@@ -59,7 +61,7 @@ const SnippetExplorer = () => {
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
-            </SidebarGroupLabel>
+            </div>
             <SidebarGroupContent>
                 <SidebarMenu>
                     {folders.map((folder: SelectFolder) => (
@@ -111,7 +113,7 @@ const SnippetExplorer = () => {
                                     <SidebarMenuButton className="w-full">
                                         <ChevronRight className="mr-2 h-4 w-4 shrink-0 transition-transform" />
                                         <Folder className="mr-2 h-4 w-4 shrink-0" />
-                                        <span className="truncate font-semibold">Other</span>
+                                        <span className="truncate font-semibold">Uncategorized</span>
                                     </SidebarMenuButton>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
