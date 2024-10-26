@@ -58,7 +58,7 @@ export function Combobox({
             </PopoverTrigger>
             <PopoverContent className="w-[200px] p-0">
                 <Command>
-                    <CommandInput placeholder={`Search ${placeholder.toLowerCase()}...`} />
+                    <CommandInput placeholder={`Search ...`} />
                     <CommandEmpty>No option found.</CommandEmpty>
                     <CommandGroup>
                         <CommandList>

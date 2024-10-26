@@ -7,30 +7,15 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useRouter } from 'next/navigation'
 
-import { type ChartConfig } from "@/components/ui/chart"
 
-const chartConfig = {
-    desktop: {
-        label: "Desktop",
-        color: "#2563eb",
-    },
-    mobile: {
-        label: "Mobile",
-        color: "#60a5fa",
-    },
-} satisfies ChartConfig
 
-const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-]
 
 export default function Dashboard() {
+
+    const router = useRouter()
+
     const { data, isLoading } = useQuery({
         queryKey: ['dashboardData'],
         queryFn: getDashboardData,
@@ -46,7 +31,7 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="container mx-auto py-10">
+        <div className="container mx-auto p-4">
             <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <StatCard title="Total Snippets" value={data.totalSnippets} />
@@ -60,13 +45,28 @@ export default function Dashboard() {
                     <CardHeader>
                         <CardTitle>Snippets by Language</CardTitle>
                     </CardHeader>
-                    <CardContent className="">
-                        <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
-                            <BarChart accessibilityLayer data={chartData}>
-                                <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-                                <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
-                            </BarChart>
-                        </ChartContainer>
+                    <CardContent className="h-[300px]">
+                        {data.snippetsByLanguage.length === 0 ?
+                            <p className=''>No snippets found. Use the "+" icon on the sidebar, to create snippets.</p>
+                            : (
+                                <ChartContainer
+                                    config={{
+                                        count: {
+                                            label: "Count",
+                                            color: "hsl(var(--primary))",
+                                        },
+                                    }}
+                                    className="min-h-[200px] w-full"
+                                >
+                                    <BarChart data={data.snippetsByLanguage} width={500} height={300}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="language" />
+                                        <YAxis />
+                                        <ChartTooltip content={<ChartTooltipContent />} />
+                                        <Bar dataKey="count" fill="var(--color-count)" />
+                                    </BarChart>
+                                </ChartContainer>
+                            )}
                     </CardContent>
                 </Card>
 
@@ -75,9 +75,12 @@ export default function Dashboard() {
                         <CardTitle>Recent Snippets</CardTitle>
                     </CardHeader>
                     <CardContent>
+                        {data.recentSnippets.length === 0 &&
+                            <p className=''>No snippets found. Use the "+" icon on the sidebar, to create snippets.</p>
+                        }
                         <div className='grid grid-cols-2 gap-4'>
                             {data.recentSnippets.map((snippet) => (
-                                <div key={snippet.id} className="mb-4 last:mb-0">
+                                <div key={snippet.id} className="mb-4 last:mb-0 cursor-pointer" onClick={() => router.push(`/snippets/${snippet.id}`)}>
                                     <h3 className="font-semibold">{snippet.title}</h3>
                                     <p className="text-sm text-muted-foreground">
                                         {new Date(snippet.createdAt).toLocaleDateString()}
@@ -95,6 +98,9 @@ export default function Dashboard() {
                         <CardDescription>Most used tags in your snippets</CardDescription>
                     </CardHeader>
                     <CardContent>
+                        {data.topTags.length === 0 &&
+                            <p className=''>No data found.</p>
+                        }
                         <div className="flex flex-wrap gap-2">
                             {data.topTags.map((tag) => (
                                 <Badge key={tag.name} variant="secondary" className="text-lg">
