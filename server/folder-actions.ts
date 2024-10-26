@@ -100,10 +100,6 @@ export async function renameFolder(folderId: string, newName: string) {
       .where(and(eq(folders.name, newName), eq(folders.userId, userId)))
       .limit(1);
 
-      console.log('new name: ', newName);
-      console.log('existing folder', existingFolder);
-
-
     if (existingFolder.length > 0) {
       throw new Error('A folder with this name already exists');
     }
