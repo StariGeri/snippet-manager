@@ -6,7 +6,13 @@ import { Badge } from "@/components/ui/badge"
 import Prism from "prismjs"
 import { useEffect, useState } from "react"
 import { getLanguageIcon } from "@/hooks/useLanguageIcon";
-import { CopyIcon } from "lucide-react";
+import { CopyIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { deleteSnippet } from "@/server/snippet-actions";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { useQueryClient } from "@tanstack/react-query";
 
 // Import Prism themes and languages
 import "prismjs/themes/prism-tomorrow.css";
@@ -42,12 +48,37 @@ import "prismjs/components/prism-scala";
 
 export default function SnippetDetail({ snippet }: { snippet: Snippet }) {
 
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(snippet.code);
     setCopied(true);
     setTimeout(() => setCopied(false), 4000);
+  };
+
+  const handleEdit = () => {
+    router.push(`/snippets/edit/${snippet.id}`);
+  };
+
+  const handleDelete = async () => {
+    const result = await deleteSnippet(snippet.id);
+    if (result.success) {
+      toast({
+        title: "Snippet deleted",
+        description: "Your snippet has been deleted successfully.",
+      });
+      router.push("/snippets");
+      queryClient.invalidateQueries({ queryKey: ['foldersAndSnippets'] });
+    } else {
+      toast({
+        title: "Error",
+        description: result.error || "An error occurred while deleting the snippet.",
+        variant: "destructive",
+      });
+    }
   };
 
   useEffect(() => {
@@ -60,10 +91,29 @@ export default function SnippetDetail({ snippet }: { snippet: Snippet }) {
     <div className="inset-0 flex min-h-[80dvh] w-full h-full flex-col items-center justify-center bg-white bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px]">
       <Card className="container w-full max-w-3xl mx-auto mt-8 bg-muted">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <LanguageIcon className="h-5 w-5" />
-            <span className="text-lg md:text-xl lg:text-2xl">{snippet.title}</span>
-          </CardTitle>
+          <div className="flex justify-between items-center">
+            <CardTitle className="flex items-center gap-2">
+              <LanguageIcon className="h-5 w-5" />
+              <span className="text-lg md:text-xl lg:text-2xl">{snippet.title}</span>
+            </CardTitle>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="default">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleEdit}>
+                  <Pencil className="mr-2 h-4 w-4" />
+                  <span>Edit</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleDelete}>
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  <span>Delete</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
           <CardDescription className="text-base">{snippet.description}</CardDescription>
         </CardHeader>
         <CardContent>

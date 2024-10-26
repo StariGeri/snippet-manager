@@ -14,22 +14,27 @@ import { snippetSchema } from "@/types/formSchemas"
 import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useCreateSnippet } from "@/hooks/useCreateSnippet";
+import { useEditSnippet } from "@/hooks/useEditSnippet"
+import { Snippet } from "@/types/snippet"
 
-export default function CreateSnippetPage() {
-
-    const { folders, onSubmit } = useCreateSnippet();
+export default function EditSnippetPage({ snippet }: { snippet: Snippet }) {
+    const { folders, onSubmit } = useEditSnippet(snippet.id);
 
     const { register, handleSubmit, control, formState: { errors } } = useForm<z.infer<typeof snippetSchema>>({
         resolver: zodResolver(snippetSchema),
         defaultValues: {
-            tags: [],
+            title: snippet.title,
+            description: snippet.description || "",
+            language: snippet.language,
+            code: snippet.code,
+            folderId: snippet.folderId || undefined,
+            tags: snippet.tags.map(tag => tag.name),
         },
     })
 
     return (
         <div className="container mx-auto py-10">
-            <h1 className="text-2xl font-bold mb-5">Create New Snippet</h1>
+            <h1 className="text-2xl font-bold mb-5">Edit Snippet</h1>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="flex flex-col gap-y-1.5">
                     <Label htmlFor="title">Title</Label>
@@ -116,8 +121,8 @@ export default function CreateSnippetPage() {
                             <div className="flex flex-wrap gap-2">
                                 {field.value.map((tag, index) => (
                                     <div key={index} className="flex items-center bg-primary text-primary-foreground rounded px-2 py-1">
-                                        <span>{tag}</span>
-                                        <button
+                                        <span key={index}>{tag}</span>
+                                        <Button
                                             type="button"
                                             onClick={() => {
                                                 const newTags = field.value.filter((_, i) => i !== index)
@@ -126,7 +131,7 @@ export default function CreateSnippetPage() {
                                             className="ml-2 text-sm"
                                         >
                                             ×
-                                        </button>
+                                        </Button>
                                     </div>
                                 ))}
                                 {field.value.length < 3 && (
@@ -155,7 +160,7 @@ export default function CreateSnippetPage() {
                     {errors.tags && <p className="text-red-500 text-sm mt-1">{errors.tags.message}</p>}
                 </div>
 
-                <Button type="submit">Create Snippet</Button>
+                <Button type="submit">Update Snippet</Button>
             </form>
         </div>
     )

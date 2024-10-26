@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from "react"
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub } from "@/components/ui/sidebar"
 import { ChevronRight, Code, Folder, MoreHorizontal, Plus } from "lucide-react"
@@ -23,10 +23,8 @@ interface FoldersAndSnippets {
 }
 
 const SnippetExplorer = () => {
-
     const { openFolderId, handleFolderClick, handleFolderCreated, handleFolderDeleted, handleFolderRenamed } = useSnippetExplorer();
     
-    // Fetching the folders and snippets data
     const { data, isLoading } = useQuery<FoldersAndSnippets>({
         queryKey: ['foldersAndSnippets'],
         queryFn: getFoldersAndSnippets
@@ -34,10 +32,7 @@ const SnippetExplorer = () => {
 
     const router = useRouter()
 
-    // Show the skeleton loader while the data is being fetched
     if (isLoading) return <SkeletonSnippetExplorer />
-
-    // If there is no data, return null
     if (!data) return null
 
     const { folders, snippets } = data
@@ -74,25 +69,27 @@ const SnippetExplorer = () => {
                                 onOpenChange={() => handleFolderClick(folder.id)}
                                 className="group/collapsible [&[data-state=open]>button>svg:first-child]:rotate-90"
                             >
-                                <CollapsibleTrigger asChild>
-                                    <SidebarMenuButton className="w-full">
-                                        <ChevronRight className="mr-2 h-4 w-4 shrink-0 transition-transform" />
-                                        <Folder className="mr-2 h-4 w-4 shrink-0" />
-                                        <span className="truncate font-semibold">{folder.name}</span>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild className="outline-none">
-                                                <Button variant="ghost" size="icon" className="ml-auto">
-                                                    <MoreHorizontal className="h-4 w-4" />
-                                                    <span className="sr-only">More options</span>
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="start">
-                                                <RenameFolderDialog folder={folder} onFolderRenamed={handleFolderRenamed} />
-                                                <DeleteFolderDialog folder={folder} onFolderDeleted={handleFolderDeleted} />
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </SidebarMenuButton>
-                                </CollapsibleTrigger>
+                                <div className="flex items-center">
+                                    <CollapsibleTrigger asChild>
+                                        <SidebarMenuButton className="flex-grow">
+                                            <ChevronRight className="mr-2 h-4 w-4 shrink-0 transition-transform" />
+                                            <Folder className="mr-2 h-4 w-4 shrink-0" />
+                                            <span className="truncate font-semibold">{folder.name}</span>
+                                        </SidebarMenuButton>
+                                    </CollapsibleTrigger>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="ghost" size="icon" className="ml-auto">
+                                                <MoreHorizontal className="h-4 w-4" />
+                                                <span className="sr-only">More options</span>
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end">
+                                            <RenameFolderDialog folder={folder} onFolderRenamed={handleFolderRenamed} />
+                                            <DeleteFolderDialog folder={folder} onFolderDeleted={handleFolderDeleted} />
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
                                 <CollapsibleContent>
                                     <SidebarMenuSub>
                                         {snippets.filter((snippet: SelectSnippet) => snippet.folderId === folder.id).map((snippet: SelectSnippet) => (
@@ -115,7 +112,6 @@ const SnippetExplorer = () => {
                                         <ChevronRight className="mr-2 h-4 w-4 shrink-0 transition-transform" />
                                         <Folder className="mr-2 h-4 w-4 shrink-0" />
                                         <span className="truncate font-semibold">Other</span>
-
                                     </SidebarMenuButton>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>

@@ -189,3 +189,101 @@ export async function createSnippet(data: {
   }
 }
 
+/**
+ * Updates an existing snippet with the provided data.
+ * 
+ * @param id - The  ID of the snippet to update.
+ * @param data - The updated data for the snippet.
+ * 
+ * @returns An object indicating the success of the operation.
+ * 
+ * @throws Will throw an error if the user is not authenticated or if the snippet doesn't exist.
+ */
+export async function updateSnippet(id: string, data: {
+  title: string
+  description?: string
+  language: string
+  code: string
+  folderId?: string | null
+  tags: string[]
+}) {
+  const { userId } = await auth()
+
+  if (!userId) {
+    throw new Error('User not authenticated')
+  }
+
+  try {
+    // Update the snippet
+    await db.update(snippets)
+      .set({
+        title: data.title,
+        description: data.description || null,
+        language: data.language,
+        code: data.code,
+        folderId: data.folderId,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(snippets.id, id), eq(snippets.userId, userId)))
+
+    // Delete existing tag associations
+    await db.delete(snippetTags).where(eq(snippetTags.snippetId, id))
+
+    // Create new tag associations
+    for (const tagName of data.tags) {
+      const [existingTag] = await db
+        .select()
+        .from(tags)
+        .where(and(eq(tags.name, tagName), eq(tags.userId, userId)))
+        .limit(1);
+
+      let tagId
+      if (existingTag) {
+        tagId = existingTag.id
+      } else {
+        const [newTag] = await db.insert(tags).values({ name: tagName, userId }).returning()
+        tagId = newTag.id
+      }
+
+      await db.insert(snippetTags).values({ snippetId: id, tagId })
+    }
+
+    revalidatePath('/snippets')
+    return { success: true }
+  } catch (error) {
+    console.error('Error updating snippet:', error)
+    return { success: false, error: (error as Error).message }
+  }
+}
+
+/**
+ * Deletes a snippet by its ID.
+ * 
+ * @param id - The ID of the snippet to delete.
+ * 
+ * @returns An object indicating the success of the operation.
+ * 
+ * @throws Will throw an error if the user is not authenticated.
+ */
+export async function deleteSnippet(id: string) {
+  const { userId } = await auth()
+
+  if (!userId) {
+    throw new Error('User not authenticated')
+  }
+
+  try {
+    // Delete tag associations
+    await db.delete(snippetTags).where(eq(snippetTags.snippetId, id))
+
+    // Delete the snippet
+    await db.delete(snippets).where(and(eq(snippets.id, id), eq(snippets.userId, userId)))
+
+    revalidatePath('/snippets')
+    return { success: true }
+  } catch (error) {
+    console.error('Error deleting snippet:', error)
+    return { success: false, error: (error as Error).message }
+  }
+}
+
