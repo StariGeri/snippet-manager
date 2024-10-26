@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import Prism from "prismjs"
 import { useEffect, useState } from "react"
 import { getLanguageIcon } from "@/hooks/useLanguageIcon";
-import { CopyIcon, CheckIcon } from "lucide-react";
+import { CopyIcon } from "lucide-react";
 
 // Import Prism themes and languages
 import "prismjs/themes/prism-tomorrow.css";

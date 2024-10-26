@@ -8,7 +8,7 @@ import SnippetList from "@/components/snippets/SnippetsList";
 import { getSnippets } from "@/server/actions";
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
-import SnippetCardSkeleton from '@/components/snippets/SnippetLoadingSkeleton';
+import SnippetCardSkeleton from '@/components/skeletons/SnippetCardSkeleton';
 import SnippetFilter from '@/components/snippets/SnippetFilter';
 
 export default function SnippetsPage(): JSX.Element {

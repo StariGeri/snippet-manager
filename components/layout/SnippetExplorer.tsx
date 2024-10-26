@@ -1,18 +1,19 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query';
-import Link from "next/link";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
-import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub } from "../ui/sidebar";
-import { ChevronRight, Code, Folder } from "lucide-react";
-import { getFoldersAndSnippets } from "@/server/actions";
-import { SelectFolder, SelectSnippet } from "@/lib/db/schema";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useState } from 'react';
+import * as React from "react"
+import { useQuery } from '@tanstack/react-query'
+import Link from "next/link"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub } from "@/components/ui/sidebar"
+import { ChevronRight, Code, Folder } from "lucide-react"
+import { getFoldersAndSnippets } from "@/server/actions"
+import { SelectFolder, SelectSnippet } from "@/lib/db/schema"
+import { Skeleton } from "@/components/ui/skeleton"
+import { SkeletonSnippetExplorer } from "../skeletons/SnippetExplorerSkeleton"
 
 interface FoldersAndSnippets {
-    folders: SelectFolder[];
-    snippets: SelectSnippet[];
+    folders: SelectFolder[]
+    snippets: SelectSnippet[]
 }
 
 const SnippetItem = ({ snippet }: { snippet: SelectSnippet }) => (
@@ -24,28 +25,29 @@ const SnippetItem = ({ snippet }: { snippet: SelectSnippet }) => (
             </SidebarMenuButton>
         </Link>
     </SidebarMenuItem>
-);
+)
+
 
 const SnippetExplorer = () => {
-    const { data, isLoading, error } = useQuery<FoldersAndSnippets>({
+    const { data, isLoading } = useQuery<FoldersAndSnippets>({
         queryKey: ['foldersAndSnippets'],
         queryFn: getFoldersAndSnippets
-    });
+    })
 
-    const [openFolderId, setOpenFolderId] = useState<string | null>(null);
-
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error loading folders and snippets</div>;
-    if (!data) return <div>No data available</div>;
-
-    const { folders, snippets } = data;
-
-    const snippetsInFolders = new Set(snippets.filter(s => s.folderId).map(s => s.id));
-    const unassignedSnippets = snippets.filter(s => !snippetsInFolders.has(s.id));
+    const [openFolderId, setOpenFolderId] = React.useState<string | null>(null)
 
     const handleFolderClick = (folderId: string) => {
-        setOpenFolderId(prevId => prevId === folderId ? null : folderId);
-    };
+        setOpenFolderId(prevId => prevId === folderId ? null : folderId)
+    }
+
+    if (isLoading) return <SkeletonSnippetExplorer />
+
+    if (!data) return null
+
+    const { folders, snippets } = data
+
+    const snippetsInFolders = new Set(snippets.filter(s => s.folderId).map(s => s.id))
+    const unassignedSnippets = snippets.filter(s => !snippetsInFolders.has(s.id))
 
     return (
         <SidebarGroup>
@@ -103,7 +105,7 @@ const SnippetExplorer = () => {
                 </SidebarMenu>
             </SidebarGroupContent>
         </SidebarGroup>
-    );
-};
+    )
+}
 
-export default SnippetExplorer;
+export default SnippetExplorer

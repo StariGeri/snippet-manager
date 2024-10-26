@@ -36,7 +36,6 @@ export async function getSnippets(page: number = 1, limit: number = 6, search: s
     return [];
   }
 
-  console.log('technology', technology);
 
   try {
     const offset = (page - 1) * limit;
@@ -57,7 +56,6 @@ export async function getSnippets(page: number = 1, limit: number = 6, search: s
       .offset(offset);
 
     const snippetsData = await query;
-    console.log('snippetsData', snippetsData);
 
     const snippetsWithTags = await Promise.all(
       snippetsData.map(async (snippet) => {
