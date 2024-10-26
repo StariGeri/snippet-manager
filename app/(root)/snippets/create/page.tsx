@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -10,21 +9,16 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import CodeMirror from "@uiw/react-codemirror"
 import { javascript } from "@codemirror/lang-javascript"
-import { createSnippet } from "@/server/snippet-actions"
-import { toast } from "@/hooks/use-toast"
 import { Combobox } from "@/components/shared/Combobox"
 import { snippetSchema } from "@/types/formSchemas"
 import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useEffect, useState } from "react"
-import { getUserFolders } from "@/server/folder-actions"
-import { useQueryClient } from "@tanstack/react-query"
+import { useCreateSnippet } from "@/hooks/useCreateSnippet"
 
 export default function CreateSnippetPage() {
-    const router = useRouter()
-    const [folders, setFolders] = useState<{ id: string; name: string }[]>([])
-    const queryClient = useQueryClient();
+
+    const { folders, onSubmit } = useCreateSnippet();
 
     const { register, handleSubmit, control, formState: { errors } } = useForm<z.infer<typeof snippetSchema>>({
         resolver: zodResolver(snippetSchema),
@@ -32,40 +26,6 @@ export default function CreateSnippetPage() {
             tags: [],
         },
     })
-
-    useEffect(() => {
-        const fetchFolders = async () => {
-            const result = await getUserFolders()
-            if (result.success) {
-                setFolders(result.folders || [])
-            } else {
-                toast({
-                    title: "Error",
-                    description: "Failed to fetch folders. Please try again.",
-                    variant: "destructive",
-                })
-            }
-        }
-        fetchFolders()
-    }, [])
-
-    const onSubmit = async (data: z.infer<typeof snippetSchema>) => {
-        const result = await createSnippet(data)
-        if (result.success) {
-            toast({
-                title: "✅Snippet created",
-                description: "Your snippet has been created successfully.",
-            })
-            queryClient.invalidateQueries({ queryKey: ['foldersAndSnippets'] })
-            router.push(`/snippets/${result.snippetId}`)
-        } else {
-            toast({
-                title: "Error",
-                description: result.error || "An error occurred while creating the snippet.",
-                variant: "destructive",
-            })
-        }
-    }
 
     return (
         <div className="container mx-auto py-10">
