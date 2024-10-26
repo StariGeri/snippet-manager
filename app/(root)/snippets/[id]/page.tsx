@@ -1,10 +1,13 @@
+import { PageProps } from "@/.next/types/app/layout";
 import SnippetDetail from "@/components/snippets/SnippetDetail";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { getSnippetById } from "@/server/snippet-actions";
 
 
-export default async function SnippetPage({ params }: { params: { id: string } }) {
-    const { id } = await params;
+type Params = Promise<{ id: string }>
+
+export default async function SnippetPage(props: { params: Params }) {
+    const id = (await props.params).id;
 
     const snippet = await getSnippetById(id);
 

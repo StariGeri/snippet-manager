@@ -1,8 +1,10 @@
 import { getSnippetById } from '@/server/snippet-actions'
 import EditSnippetPage from '@/components/snippets/EditSnippetPage';
 
-export default async function EditSnippetRoute({ params }: { params: { id: string } }) {
-    const { id } = await params;
+type Params = Promise<{ id: string }>
+
+export default async function EditSnippetRoute(props: { params: Params }) {
+  const id = (await props.params).id;
 
     const snippet = await getSnippetById(id);
 
