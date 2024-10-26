@@ -29,6 +29,20 @@
       "when": 1729840541855,
       "tag": "0003_free_whizzer",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1729944483917,
+      "tag": "0004_past_shockwave",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1729945366072,
+      "tag": "0005_next_elektra",
+      "breakpoints": true
     }
   ]
 }

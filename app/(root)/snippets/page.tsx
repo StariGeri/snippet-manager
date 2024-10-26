@@ -5,7 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import SnippetList from "@/components/snippets/SnippetsList";
-import { getSnippets } from "@/server/actions";
+import { getSnippets } from "@/server/snippet-actions";
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
 import SnippetCardSkeleton from '@/components/skeletons/SnippetCardSkeleton';

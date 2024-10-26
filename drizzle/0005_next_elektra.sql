@@ -1,0 +1,1 @@
+ALTER TABLE "folders" ADD CONSTRAINT "folders_name_unique" UNIQUE("name");

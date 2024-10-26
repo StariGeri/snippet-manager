@@ -1,41 +1,29 @@
 'use server';
 
 import { db } from '@/lib/db';
-import { snippets, snippetTags, tags, folders, SelectFolder, SelectSnippet } from '@/lib/db/schema';
+import { snippets, snippetTags, tags } from '@/lib/db/schema';
 import { Snippet } from '@/types/snippet';
 import { auth } from '@clerk/nextjs/server';
 import { eq, and, ilike, or } from 'drizzle-orm';
 
-interface FoldersAndSnippets {
-  folders: SelectFolder[];
-  snippets: SelectSnippet[];
-}
 
-export async function getFoldersAndSnippets(): Promise<FoldersAndSnippets> {
-  const { userId } = await auth();
-
-  if (!userId) {
-    return { folders: [], snippets: [] };
-  }
-
-  try {
-    const userFolders = await db.select().from(folders).where(eq(folders.userId, userId));
-    const userSnippets = await db.select().from(snippets).where(eq(snippets.userId, userId));
-
-    return { folders: userFolders, snippets: userSnippets };
-  } catch (error) {
-    console.error('Error fetching folders and snippets:', error);
-    return { folders: [], snippets: [] };
-  }
-}
-
+/**
+ * Fetches snippets from the database based on the provided parameters.
+ *
+ * @param {number} [page=1] - The page number for pagination.
+ * @param {number} [limit=6] - The number of snippets to fetch per page.
+ * @param {string} [search=''] - The search term to filter snippets by title or description.
+ * @param {string} [technology=''] - The technology/language to filter snippets by.
+ * @returns {Promise<Snippet[]>} A promise that resolves to an array of snippets.
+ *
+ * @throws Will return an empty array if there is an error fetching snippets or if the user is not authenticated.
+ */
 export async function getSnippets(page: number = 1, limit: number = 6, search: string = '', technology: string = ''): Promise<Snippet[]> {
   const { userId } = await auth();
 
   if (!userId) {
     return [];
   }
-
 
   try {
     const offset = (page - 1) * limit;
@@ -82,6 +70,14 @@ export async function getSnippets(page: number = 1, limit: number = 6, search: s
   }
 }
 
+/**
+ * Retrieves a snippet by its ID for the authenticated user.
+ *
+ * @param {string} id - The ID of the snippet to retrieve.
+ * @returns {Promise<Snippet | null>} A promise that resolves to the snippet if found, or null if not found or if the user is not authenticated.
+ *
+ * @throws Will log an error to the console if there is an issue fetching the snippet.
+ */
 export async function getSnippetById(id: string): Promise<Snippet | null> {
   const { userId } = await auth();
 

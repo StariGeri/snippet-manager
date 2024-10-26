@@ -1,0 +1,1 @@
+ALTER TABLE "folders" DROP CONSTRAINT "folders_name_unique";

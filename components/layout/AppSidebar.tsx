@@ -31,7 +31,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarFooter>
           <UserProfile />
         </SidebarFooter>
-        <SidebarRail />
       </Sidebar>
     </SidebarProvider>
   )
