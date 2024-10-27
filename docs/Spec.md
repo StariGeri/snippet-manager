@@ -2,14 +2,14 @@
 
 ## Stack
 
-- Next.js App router
+- Next.js 15 App router
 - npm
 - Typescript
 - Tailwind CSS
-- ShadCn/ui
+- Shadcn/ui
 - Clerk authentication
 - Neon DB (Serverless PostgreSQL)
-- Vercel (deployhoz)
+- Vercel (Deploy)
 - Drizzle (ORM)
 
 ## Specifikáció
@@ -25,15 +25,14 @@ A snippetekről a következőket tároljuk:
 - szülő mappa (lehet null, nem muszáj, hogy legyen mappába sorolva)
 - Author (felhasználó)
 
-A snippeteket a tagek és technológiák alapján csoportosíthatjuk. A cím alapján szabadszavasan kereshetünk. 
+A snippeteket technológia alapján lehet szűrni és szabaszavasan kereshetünk közöttük.
 
 A főoldalon egy dashboardon tekinthetik meg a felhasználók a snippetjeikre vontatkozó statisztikákat (kategóriák szerinti lebontás stb..)
 
-A /snippets oldalon a snippetek megtekinthetőek és betöltenek Infinite Scrollal, itt lehet szűrni / keresni azokat.
+A /snippets oldalon a snippetek Infinite Scroll-al töltődnek be.
 
 A Sidebar-on meg lehet tekinteni a mappa struktúrát és kattintásra a snippetek innen is megnyithatóak.
 
 Az elérés útjától függetlenül (főoldal vagy sidebar) egy snippet oldalra megyünk, ahol az a snippet megtekinthető / törölhető és módosítható.
 
-## Code highlight
-https://www.youtube.com/watch?v=c92sIJ9p9fA&ab_channel=VladyslavDihtiarenko
+Mappákat létre lehet hozni, azokat átnevezni és törölni.
