@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Snippet Manager",
+  title: "Snipz - Snippet Manager",
   description: "A simple snippet manager for devs.",
 };
 

@@ -52,7 +52,7 @@ import "prismjs/components/prism-r";
 import "prismjs/components/prism-swift";
 import "prismjs/components/prism-scala";
 
-export default function SnippetDetail({ snippet }: { snippet: Snippet }) {
+export default function SnippetDetail({ snippet }: Readonly<{ snippet: Snippet }>) {
 
   const { handleCopy, handleEdit, handleDelete, isDeleteDialogOpen, setIsDeleteDialogOpen, copied } = useSnippetDetail(snippet);
 
