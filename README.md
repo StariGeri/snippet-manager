@@ -1,1 +1,1 @@
-//TODO: write down the running scripts
+Snippet Manager for organizing and categorizing code snippets
