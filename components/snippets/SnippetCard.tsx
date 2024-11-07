@@ -57,7 +57,7 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
     const LanguageIcon = getLanguageIcon(snippet.language);
 
     return (
-        <Link href={`/snippets/${snippet.id}`} passHref>
+        <Link href={`/snippets/${snippet.id}`} passHref prefetch={true}>
             <Card className="w-full max-w-md hover:shadow-lg transition-shadow duration-300 cursor-pointer">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
