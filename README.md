@@ -23,17 +23,27 @@ After cloning the repo, there is a few things to do. The app uses 3rd party solu
 Note that all of these values can be copied from both of the dashboards when creating these variables.
 
 POSTGRES_DATABASE=XX
+
 POSTGRES_HOST=XX
+
 POSTGRES_PASSWORD=XX
+
 POSTGRES_PRISMA_URL=XX
+
 POSTGRES_URL=XX
+
 POSTGRES_URL_NON_POOLING=XX
+
 POSTGRES_URL_NO_SSL=XX
+
 POSTGRES_USER=XX
 
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=XX
+
 CLERK_SECRET_KEY=XX
 
 // These are correct variables, there is no need to change them.
+
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
