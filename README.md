@@ -1,6 +1,7 @@
 Snippet Manager for organizing and categorizing code snippets.
 
 The app is deployed on Vercel and can be visited: https://snippet-manager-pink.vercel.app/
+
 The git repo:https://github.com/StariGeri/snippet-manager
 
 # Running the app
@@ -13,7 +14,7 @@ After cloning the repo, there is a few things to do. The app uses 3rd party solu
    - Sign up on https://clerk.com/ and create a new project. Copy the env variables.
    - Sign up on https://vercel.com/ and create a new project, then create a Vercel Postgres database (storage tab). Copy the environment variables.
 3) Generate the database tables with `npm generate` and then migrate the changes with `npm migrate`.
-4) (Optional) Drizzle provides a GUI for watching the database. You can run drizzle studio with `npx tsx scripts/seed.ts`
+4) (Optional) Drizzle provides a GUI for watching the database. You can run drizzle studio with `npx drizzle-kit studio`
 5) Run the app with `npm run dev`.
 6) 🎉 Aaaand that is it! The app is running on http://localhost:3000
 
